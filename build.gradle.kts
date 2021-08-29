@@ -17,12 +17,9 @@ subprojects {
     }
 
     dependencies {
-        implementation(platform(kotlin("bom")))
-        implementation(platform("org.junit:junit-bom:5.7.2"))
-
-        implementation(kotlin("stdlib-jdk8"))
-        implementation("org.apache.commons:commons-lang3:3.12.0")
-
+        api(platform(kotlin("bom")))
+        api(platform("org.junit:junit-bom:5.7.2"))
+        api(kotlin("stdlib-jdk8"))
         testImplementation(kotlin("test"))
         testImplementation("org.mongodb:mongodb-driver-sync:4.3.0")
     }
