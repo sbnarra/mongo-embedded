@@ -9,7 +9,7 @@ data class MongoParams(
     val workingDirectory: File = workingDirectory(),
     val id: String = UUID.randomUUID().toString(),
     private val port: Int = MongoParams.port(),
-    val type: Type = Type.valueOf(type().uppercase())
+    val type: Type = Type.valueOf(type().toUpperCase())
 ) {
 
     private val _port = if (port != -1) port else ServerSocket(0).use { it.localPort }
@@ -20,7 +20,7 @@ data class MongoParams(
     }
 
     companion object {
-        fun workingDirectory(): File = File(System.getProperty("user.home"), ".mongo/${type().lowercase()}")
+        fun workingDirectory(): File = File(System.getProperty("user.home"), ".mongo/${type().toLowerCase()}")
         const val DEFAULT_PORT: Int = 27017
         fun port(): Int = System.getProperty("mongo.port", "$DEFAULT_PORT").toInt()
         fun version(): String = System.getProperty("mongo.version", "5.0.2")

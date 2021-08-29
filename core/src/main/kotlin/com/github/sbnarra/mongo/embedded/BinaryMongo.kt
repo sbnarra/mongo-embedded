@@ -104,7 +104,7 @@ class BinaryMongo(override var params: MongoParams,
                     System.getProperty(IDENTIFIER_KEY) != null ||
                     System.getProperty(FILETYPE_KEY) != null
 
-            private val OS_NAME = System.getProperty("os.name").lowercase()
+            private val OS_NAME = System.getProperty("os.name").toLowerCase()
             val CURRENT: OS = if (useCustom()) CUSTOM
             else if (OS_NAME.indexOf("mac") >= 0) MAC
             else if (OS_NAME.indexOf("win") >= 0) WINDOWS
