@@ -3,13 +3,11 @@ package com.github.sbnarra.mongo.embedded
 import com.github.sbnarra.mongo.embedded.util.Archive
 import com.github.sbnarra.mongo.embedded.util.PidManager
 import com.github.sbnarra.mongo.embedded.util.Processes
-import org.apache.commons.lang3.SystemUtils
+import java.io.BufferedInputStream
 import java.io.File
-import java.net.URI
-import java.net.http.HttpClient
-import java.net.http.HttpRequest
-import java.net.http.HttpResponse
-import java.nio.file.Files
+import java.io.FileOutputStream
+import java.net.URL
+
 
 class BinaryMongo(override var params: MongoParams,
                   override var running: Boolean = false): Mongo() {
@@ -50,7 +48,7 @@ class BinaryMongo(override var params: MongoParams,
         )
         checkReadiness()
 
-        pidManager.save(params, process.pid())
+        pidManager.save(params, Processes.getProcessID(process))
 
         println("client: ${clientExec.absolutePath}")
         println("log file: $logFile")
@@ -65,11 +63,14 @@ class BinaryMongo(override var params: MongoParams,
         }
         println("downloading from '$archiveUrl' to '$archiveFile'")
 
-        val request = HttpRequest.newBuilder().GET().uri(URI(archiveUrl)).build()
-        val responseBodyHandler = HttpResponse.BodyHandlers.ofFile(archiveFile.toPath())
-        val response = HttpClient.newHttpClient().send(request, responseBodyHandler)
-        if (response.statusCode() != 200) {
-            throw RuntimeException("error downloading from ${archiveUrl}: ${response.statusCode()}")
+        BufferedInputStream(URL(archiveUrl).openStream()).use { inputStream ->
+            FileOutputStream(archiveFile).use { fileOutputStream ->
+                val dataBuffer = ByteArray(1024)
+                var bytesRead: Int
+                while (inputStream.read(dataBuffer, 0, 1024).also { bytesRead = it } != -1) {
+                    fileOutputStream.write(dataBuffer, 0, bytesRead)
+                }
+            }
         }
     }
 
@@ -103,11 +104,12 @@ class BinaryMongo(override var params: MongoParams,
                     System.getProperty(IDENTIFIER_KEY) != null ||
                     System.getProperty(FILETYPE_KEY) != null
 
+            private val OS_NAME = System.getProperty("os.name").lowercase()
             val CURRENT: OS = if (useCustom()) CUSTOM
-            else if (SystemUtils.IS_OS_MAC) MAC
-            else if (SystemUtils.IS_OS_WINDOWS) WINDOWS
-            else if (SystemUtils.IS_OS_LINUX) UBUNTU
-            else throw RuntimeException("unknown OS: ${SystemUtils.OS_NAME}")
+            else if (OS_NAME.indexOf("mac") >= 0) MAC
+            else if (OS_NAME.indexOf("win") >= 0) WINDOWS
+            else if (OS_NAME.indexOf("nix") >= 0 || OS_NAME.indexOf("nux") >= 0 || OS_NAME.indexOf("aix") > 0) UBUNTU
+            else throw RuntimeException("unknown OS: $OS_NAME")
 
             const val TYPE_KEY = "mongo.os.type"
             const val IDENTIFIER_KEY = "mongo.os.identifier"

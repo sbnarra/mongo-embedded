@@ -12,6 +12,12 @@ subprojects {
 
     group = "com.github.sbnarra.mongo"
 
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(8))
+        }
+    }
+
     repositories {
         mavenCentral()
     }
@@ -19,7 +25,6 @@ subprojects {
     dependencies {
         api(platform(kotlin("bom")))
         api(platform("org.junit:junit-bom:5.7.2"))
-        api(kotlin("stdlib-jdk8"))
         testImplementation(kotlin("test"))
         testImplementation("org.mongodb:mongodb-driver-sync:4.3.0")
     }
@@ -45,5 +50,10 @@ subprojects {
 
     project.parent!!.tasks.release {
         dependsOn(tasks.findByName("publish"))
+    }
+
+    project.tasks.withType(Test::class.java) {
+        testLogging.showStandardStreams = true
+        testLogging.showStackTraces
     }
 }

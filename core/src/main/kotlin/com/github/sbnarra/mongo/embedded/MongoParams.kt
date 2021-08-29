@@ -1,6 +1,5 @@
 package com.github.sbnarra.mongo.embedded
 
-import org.apache.commons.lang3.SystemUtils
 import java.io.File
 import java.net.ServerSocket
 import java.util.*
@@ -21,7 +20,7 @@ data class MongoParams(
     }
 
     companion object {
-        fun workingDirectory(): File = File(SystemUtils.USER_HOME, ".mongo/${type().lowercase()}")
+        fun workingDirectory(): File = File(System.getProperty("user.home"), ".mongo/${type().lowercase()}")
         const val DEFAULT_PORT: Int = 27017
         fun port(): Int = System.getProperty("mongo.port", "$DEFAULT_PORT").toInt()
         fun version(): String = System.getProperty("mongo.version", "5.0.2")
