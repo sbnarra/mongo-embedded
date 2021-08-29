@@ -1,0 +1,29 @@
+name: "Gradle Tests"
+description: "Runs gradle tests"
+inputs:
+  os:
+    description: name of OS
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Install Docker
+      uses: docker-practice/actions-setup-docker@master
+#      if: matrix.os == 'macos-latest'
+    - name: Setup Java
+      uses: actions/setup-java@v2
+      with:
+        distribution: temurin
+        java-version: ${{ env.JAVA_VERSION }}
+    - name: Test
+      uses: gradle/gradle-build-action@v1
+      with:
+        gradle-version: ${{ env.GRADLE_VERSION }}
+        arguments: check --stacktrace
+    - name: Test Report
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: results (${{ inputs.os }})
+        path: "*/build/test-results/test/*.xml"
+        reporter: java-junit

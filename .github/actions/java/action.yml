@@ -1,0 +1,13 @@
+name: "Setup Java"
+description: "Runs gradle tests"
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-java@v2
+#
+#        name: Setup Java
+#          uses:
+#
+#          with:
+#            distribution: temurin
+#            java-version: 11
