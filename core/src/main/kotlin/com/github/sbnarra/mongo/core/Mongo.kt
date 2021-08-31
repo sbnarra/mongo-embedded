@@ -14,7 +14,7 @@ abstract class Mongo(running: Boolean = false): Closeable {
         private set
 
     protected abstract fun startup()
-    protected abstract fun stop()
+    protected abstract fun shutdown()
 
     fun start() =
         if (running) throw RuntimeException("unable to start, mongo already running")
@@ -31,7 +31,7 @@ abstract class Mongo(running: Boolean = false): Closeable {
         }.isSuccess
 
     override fun close() {
-        if (running) runCatching(this::stop)
+        if (running) runCatching(this::shutdown)
         else log.warn("unable to stop, mongo not running")
         running = false
     }
@@ -44,7 +44,7 @@ abstract class Mongo(running: Boolean = false): Closeable {
         }
     }
 
-    private fun isReady(): Boolean = Exec.run(*isReadyCmd).waitFor() == 0
+    private fun isReady(): Boolean = Exec.run(redirect = ProcessBuilder.Redirect.PIPE, args = isReadyCmd).waitFor() == 0
 
     companion object {
         private val log by LoggerDelegate()

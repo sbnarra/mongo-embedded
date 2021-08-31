@@ -21,5 +21,5 @@ class BinaryMongo(override val params: MongoParams,
         pidManager.save(params.port, pid)
     }
 
-    override fun stop() = pidManager.kill(params.port)
+    override fun shutdown() = pidManager.kill(params.port)
 }

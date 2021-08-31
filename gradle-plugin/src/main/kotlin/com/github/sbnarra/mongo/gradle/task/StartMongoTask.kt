@@ -6,7 +6,7 @@ import org.gradle.api.tasks.TaskAction
 abstract class StartMongoTask: BaseMongoTask() {
 
     @TaskAction
-    fun start() = MongoFactory().create(params.get()).start()
+    fun start() = MongoFactory().create(params).start()
 
     companion object {
         const val name = "startMongo"

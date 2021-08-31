@@ -1,8 +1,6 @@
 package com.github.sbnarra.mongo.core
 
 import com.github.sbnarra.mongo.core.util.Exec
-import com.github.sbnarra.mongo.core.util.LoggerDelegate
-import java.io.File
 
 class DockerMongo(override var params: MongoParams,
                   running: Boolean = false) : Mongo(running) {
@@ -15,7 +13,7 @@ class DockerMongo(override var params: MongoParams,
             "-p", "${params.port}:27017", "mongo:${params.version}")
     }
 
-    override fun stop() {
+    override fun shutdown() {
         Exec.run("docker", "container", "stop", params.id).waitFor()
     }
 }
