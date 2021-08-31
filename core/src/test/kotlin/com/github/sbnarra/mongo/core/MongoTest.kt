@@ -1,25 +1,17 @@
-package com.github.sbnarra.mongo.embedded
+package com.github.sbnarra.mongo.core
 
 import com.mongodb.ConnectionString
 import com.mongodb.MongoClientSettings
 import com.mongodb.assertions.Assertions
 import com.mongodb.client.MongoClients
-import java.io.File
 import java.util.concurrent.TimeUnit
 import kotlin.test.Test
 
-val mongoVersion: String = System.getProperty("mongo.version", "5.0.2")
+val params = MongoParams.withDefaults(port = 0)
 
-//@Ignore // TODO: fix ci pipeline to work with docker
-class DockerMongoTest: MongoTest(DockerMongo(MongoParams(
-    version = mongoVersion,
-    workingDirectory = File("build/mongo/docker")))
-)
+class DockerMongoTest: MongoTest(DockerMongo(params.copy(type = MongoParams.Type.DOCKER)))
 
-class BinaryMongoTest: MongoTest(BinaryMongo(MongoParams(
-    version = mongoVersion,
-    workingDirectory = File("build/mongo/binary")))
-)
+class BinaryMongoTest: MongoTest(MongoFactory().create(params.copy(type = MongoParams.Type.BINARY)))
 
 abstract class MongoTest(val mongo: Mongo) {
 
@@ -36,7 +28,7 @@ abstract class MongoTest(val mongo: Mongo) {
     }
 
     private fun settings(): MongoClientSettings = MongoClientSettings.builder()
-        .applyConnectionString(ConnectionString("mongodb://localhost:${mongo.params.port()}/${javaClass.simpleName}"))
+        .applyConnectionString(ConnectionString("mongodb://localhost:${mongo.params.port}/${javaClass.simpleName}"))
         .applyToSocketSettings { it
             .connectTimeout(1, TimeUnit.SECONDS)
             .readTimeout(1, TimeUnit.SECONDS)

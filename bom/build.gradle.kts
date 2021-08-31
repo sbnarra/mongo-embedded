@@ -1,5 +1,6 @@
 dependencies {
     constraints {
+
         api("junit:junit:4.13.2")
 
         api(project(":core"))

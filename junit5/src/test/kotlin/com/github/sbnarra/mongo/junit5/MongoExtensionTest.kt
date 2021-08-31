@@ -1,7 +1,7 @@
 package com.github.sbnarra.mongo.junit5
 
-import com.github.sbnarra.mongo.embedded.Mongo
-import com.github.sbnarra.mongo.embedded.MongoParams
+import com.github.sbnarra.mongo.core.Mongo
+import com.github.sbnarra.mongo.core.MongoParams
 import com.github.sbnarra.mongo.test.InjectMongo
 import com.github.sbnarra.mongo.test.InjectMongoParams
 import com.github.sbnarra.mongo.test.TestMongoParams
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import java.util.concurrent.TimeUnit
 
 @ExtendWith(MongoExtension::class)
-@TestMongoParams(port = TestMongoParams.RANDOM_PORT)
+@TestMongoParams(port = -1)
 class MongoExtensionTest {
 
     @InjectMongo
@@ -35,7 +35,7 @@ class MongoExtensionTest {
     }
 
     private fun settings(): MongoClientSettings = MongoClientSettings.builder()
-        .applyConnectionString(ConnectionString("mongodb://localhost:${params.port()}/${javaClass.simpleName}"))
+        .applyConnectionString(ConnectionString("mongodb://localhost:${params.port}/${javaClass.simpleName}"))
         .applyToSocketSettings { it
             .connectTimeout(1, TimeUnit.SECONDS)
             .readTimeout(1, TimeUnit.SECONDS)
