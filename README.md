@@ -54,3 +54,7 @@ dependencies {
 ---
 
 use `act` to test CI, https://github.com/nektos/act
+
+add regression pipeline
+* test builds with different gradle versions
+* test core on different OS's

@@ -1,4 +1,4 @@
-package com.github.sbnarra.mongo.embedded.util
+package com.github.sbnarra.mongo.core.util
 
 import org.apache.commons.compress.archivers.ArchiveEntry
 import org.apache.commons.compress.archivers.ArchiveInputStream

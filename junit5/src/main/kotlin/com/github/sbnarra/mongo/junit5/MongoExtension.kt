@@ -1,8 +1,8 @@
 package com.github.sbnarra.mongo.junit5
 
-import com.github.sbnarra.mongo.embedded.Mongo
-import com.github.sbnarra.mongo.embedded.MongoFactory
-import com.github.sbnarra.mongo.embedded.MongoParams
+import com.github.sbnarra.mongo.core.Mongo
+import com.github.sbnarra.mongo.core.MongoFactory
+import com.github.sbnarra.mongo.core.MongoParams
 import com.github.sbnarra.mongo.test.InjectMongo
 import com.github.sbnarra.mongo.test.InjectMongoParams
 import com.github.sbnarra.mongo.test.TestMongoParams
@@ -18,7 +18,7 @@ class MongoExtension: BeforeAllCallback, BeforeEachCallback, AfterAllCallback {
     override fun beforeAll(context: ExtensionContext?) {
         val testMongoParams = context!!.requiredTestClass.getDeclaredAnnotation(TestMongoParams::class.java)
         val params: MongoParams =
-            if (testMongoParams == null) MongoParams()
+            if (testMongoParams == null) MongoParams.withDefaults()
             else TestMongoParamsBuilder().toMongoParams(testMongoParams)
 
         mongo = MongoFactory().create(params)

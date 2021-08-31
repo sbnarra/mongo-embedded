@@ -25,6 +25,8 @@ subprojects {
     dependencies {
         api(platform(kotlin("bom")))
         api(platform("org.junit:junit-bom:5.7.2"))
+        implementation("org.slf4j:slf4j-api:1.7.32")
+        testImplementation("org.slf4j:slf4j-simple:1.7.32")
         testImplementation(kotlin("test"))
         testImplementation("org.mongodb:mongodb-driver-sync:4.3.0")
     }
@@ -54,6 +56,6 @@ subprojects {
 
     project.tasks.withType(Test::class.java) {
         testLogging.showStandardStreams = true
-        testLogging.showStackTraces
+        testLogging.showStackTraces = true
     }
 }

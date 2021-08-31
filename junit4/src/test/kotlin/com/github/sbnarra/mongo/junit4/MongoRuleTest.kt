@@ -27,7 +27,7 @@ class MongoRuleTest {
     }
 
     private fun settings(): MongoClientSettings = MongoClientSettings.builder()
-        .applyConnectionString(ConnectionString("mongodb://localhost:${rule.mongo.params.port()}/${javaClass.simpleName}"))
+        .applyConnectionString(ConnectionString("mongodb://localhost:${rule.mongo.params.port}/${javaClass.simpleName}"))
         .applyToSocketSettings { it
             .connectTimeout(1, TimeUnit.SECONDS)
             .readTimeout(1, TimeUnit.SECONDS)

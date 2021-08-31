@@ -7,16 +7,16 @@ import org.gradle.api.Project
 
 class MongoGradlePlugin: Plugin<Project> {
     override fun apply(project: Project) {
-        project.extensions.create(MongoGradleExtension.name, MongoGradleExtension::class.java)
+        project.extensions.create(MongoExtension.name, MongoExtension::class.java, project)
 
         project.repositories.maven {
             it.setUrl("https://maven.pkg.github.com/sbnarra/mongo-embedded")
         }
-//
+
 //        project.dependencies.add("implementation",
 //            project.dependencies.platform("${project.group}:bom:${project.version}"))
 
-        project.tasks.register(StartMongoTask.name, StartMongoTask::class.java)
-        project.tasks.register(StopMongoTask.name, StopMongoTask::class.java)
+        project.tasks.create(StartMongoTask.name, StartMongoTask::class.java)
+        project.tasks.create(StopMongoTask.name, StopMongoTask::class.java)
     }
 }

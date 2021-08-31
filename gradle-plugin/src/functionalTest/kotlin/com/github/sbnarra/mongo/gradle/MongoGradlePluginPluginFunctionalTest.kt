@@ -20,10 +20,10 @@ class MongoGradlePluginPluginFunctionalTest {
         val runner = GradleRunner.create()
         runner.forwardOutput()
         runner.withPluginClasspath()
-        runner.withArguments("startMongo", "stopMongo", "--stacktrace")
+        runner.withArguments("startMongo", "stopMongo", "--stacktrace", "--info")
         runner.withProjectDir(projectDir)
         val result = runner.build()
 
-        assertTrue(result.output.contains("starting mongo..."))
+        assertTrue(result.output.contains("mongo is running on port 27017"))
     }
 }

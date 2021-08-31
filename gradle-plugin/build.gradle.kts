@@ -25,7 +25,9 @@ afterEvaluate {
 val functionalTestSourceSet = sourceSets.create("functionalTest") {}
 
 gradlePlugin.testSourceSets(functionalTestSourceSet)
-configurations["functionalTestImplementation"].extendsFrom(configurations["testImplementation"])
+configurations["functionalTestImplementation"]
+    .extendsFrom(configurations["testImplementation"])
+    .exclude(group = "org.slf4j", module = "slf4j-simple") // gradle api provides this
 
 val functionalTest by tasks.registering(Test::class) {
     group = "verification"
